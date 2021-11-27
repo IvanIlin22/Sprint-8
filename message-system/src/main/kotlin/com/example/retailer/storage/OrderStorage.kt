@@ -3,7 +3,6 @@ package com.example.retailer.storage
 import com.example.retailer.api.distributor.Order
 import com.example.retailer.api.distributor.OrderInfo
 
-
 /**
  * Интерфейс для организации хранилища заявок
  */
@@ -24,5 +23,4 @@ interface OrderStorage {
      * Получение информации о заявке по id или null если не найдено
      */
     fun getOrderInfo(id: String) : OrderInfo?
-
 }

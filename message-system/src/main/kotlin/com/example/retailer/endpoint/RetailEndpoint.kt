@@ -17,6 +17,4 @@ class RetailEndpoint {
 
     @GetMapping("/view/{id}")
     fun viewOrder(@PathVariable("id") id: String): OrderInfo? = orderService.getOrderInfo(id)
-
 }
-
