@@ -42,15 +42,36 @@ class SlowlyApiTest {
                 // задаем матчер для нашего запроса
                 HttpRequest.request()
                     .withMethod("GET")
-                    .withPath("/")
+                    .withPath("/pokemon/1")
             )
             .respond(
                 // наш запрос попадает на таймаут
                 HttpResponse.response()
-                    .withStatusCode(400)
+                    .withStatusCode(200)
+                    .withBody("""{"name":"bulbasaur"}""")
                     .withDelay(TimeUnit.SECONDS, 30) //
             )
         // expect
-        assertEquals("predefined data", client.getSomething().data)
+        assertEquals("predefined data", client.getSomething().name)
+    }
+
+    @Test
+    fun `getSomething() should return pokemon`() {
+        // given
+        MockServerClient("127.0.0.1", 18080)
+            .`when`(
+                // задаем матчер для нашего запроса
+                HttpRequest.request()
+                    .withMethod("GET")
+                    .withPath("/pokemon/1")
+            )
+            .respond(
+                // наш запрос попадает на таймаут
+                HttpResponse.response()
+                    .withStatusCode(200)
+                    .withBody("""{"name":"bulbasaur"}""")
+            )
+        // expect
+        assertEquals("bulbasaur", client.getSomething().name)
     }
 }
