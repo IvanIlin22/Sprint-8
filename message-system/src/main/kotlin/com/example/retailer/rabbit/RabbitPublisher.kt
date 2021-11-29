@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component
 @Component
 class RabbitPublisher : DistributorPublisher {
 
-    private val EXCHANGE: String = "distributor_exchange"
     private val LOGGER: Logger = LoggerFactory.getLogger(RabbitPublisher::class.java)
 
     @Autowired
@@ -21,8 +20,8 @@ class RabbitPublisher : DistributorPublisher {
     override fun placeOrder(order: Order): Boolean {
         if (order.id != null) {
             amqpTemplate.convertAndSend(EXCHANGE, "distributor.placeOrder.IvalIlin22.${order.id}", order) {
-                it.messageProperties.headers["Notify-Exchange"] = "distributor_exchange"
-                it.messageProperties.headers["Notify-RoutingKey"] = "retailer.IvalIlin22"
+                it.messageProperties.headers["Notify-Exchange"] = EXCHANGE
+                it.messageProperties.headers["Notify-RoutingKey"] = ROUTING_KEY
                 it
             }
             LOGGER.info("Order pushed to RabbitMQ ${order.id}")
