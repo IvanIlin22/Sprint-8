@@ -1,7 +1,6 @@
 package com.example.retailer.rabbit
 
-import com.example.retailer.api.distributor.Order
-import com.example.retailer.api.distributor.OrderStatus
+import com.example.retailer.api.distributor.OrderInfo
 import com.example.retailer.storage.OrderInfoRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,13 +16,11 @@ class RabbitListener {
     @Autowired
     private lateinit var orderInfoRepository: OrderInfoRepository
 
-    @RabbitListener(queues = arrayOf("order_queue"))
-    fun receivedMessage(order: Order) {
-        if(order.id != null) {
-            LOGGER.info("Received order from RabbitMQ: $order")
-            val orderInfo = orderInfoRepository.findById(order.id).get()
-            orderInfo.status = OrderStatus.DELIVERED
-            orderInfoRepository.save(orderInfo)
-        }
+    @RabbitListener(queues = arrayOf(QUEUE))
+    fun receivedMessage(order: OrderInfo) {
+        LOGGER.info("Received order from RabbitMQ: $order")
+        val orderInfo = orderInfoRepository.findById(order.orderId).get()
+        orderInfo.status = order.status
+        orderInfoRepository.save(orderInfo)
     }
 }

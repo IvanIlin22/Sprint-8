@@ -13,12 +13,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 
+const val EXCHANGE: String = "distributor_exchange"
+const val QUEUE: String = "retailer_queue"
+const val ROUTING_KEY: String = "retailer.IvalIlin22.#"
+
 @Configuration
 @ComponentScan("com.example.retailer.rabbit")
 class RabbitConfig {
-
-    private val EXCHANGE: String = "distributor_exchange"
-    private val QUEUE: String = "order_queue"
 
     @Bean
     fun topicExchange(): TopicExchange {
@@ -32,7 +33,7 @@ class RabbitConfig {
 
     @Bean
     fun binding(): Binding {
-        return BindingBuilder.bind(queue()).to(topicExchange()).with("retailer.IvalIlin22.#")
+        return BindingBuilder.bind(queue()).to(topicExchange()).with(ROUTING_KEY)
     }
 
     @Bean
